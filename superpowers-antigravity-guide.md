@@ -1,80 +1,74 @@
 # Hướng dẫn: Cài đặt và Cấu hình Superpowers Plugin cho Antigravity CLI
 
-Tài liệu này hướng dẫn cách cài đặt plugin `superpowers` và cấu hình Hook khởi động (`session-start`) tương thích hoàn toàn với định dạng PreInvocation (`injectSteps`) của Antigravity CLI.
+Tài liệu này hướng dẫn cách cài đặt thủ công plugin `superpowers` bằng cách clone từ GitHub và cấu hình Hook khởi động (`session-start`) tương thích hoàn toàn với định dạng PreInvocation (`injectSteps`) của Antigravity CLI.
 
 ---
 
-## 1. Cài đặt hoặc Cập nhật Superpowers Plugin
+## 1. Tải bộ skills của Superpowers từ GitHub
 
-### Cài đặt lần đầu
-Chạy lệnh dưới đây để tải và cài đặt plugin trực tiếp từ repository GitHub chính thức:
+Vì Antigravity không hỗ trợ tự động cài đặt qua CLI cho extension này, ta sẽ clone trực tiếp repo chính thức về thư mục plugin của Antigravity:
+
 ```bash
-gemini extensions install https://github.com/obra/superpowers
+git clone https://github.com/obra/superpowers.git ~/.gemini/config/plugins/superpowers
 ```
 
-### Cập nhật lên bản mới nhất
-Khi có bản cập nhật mới từ upstream, chạy lệnh:
+### Cách cập nhật sau này:
+Nếu muốn cập nhật phiên bản mới nhất từ upstream, bạn chỉ cần di chuyển vào thư mục plugin và kéo code mới về:
 ```bash
-gemini extensions update superpowers
+cd ~/.gemini/config/plugins/superpowers && git pull
 ```
-
-*Lưu ý: Antigravity CLI sẽ tự động tải các file plugin vào thư mục nguồn của nó tại: `~/.gemini/config/plugins/superpowers/`.*
 
 ---
 
 ## 2. Thiết lập Hook Script `session-start`
 
-Do định dạng JSON mặc định của plugin `superpowers` nguyên bản không tương thích với Antigravity CLI (Antigravity yêu cầu định dạng `injectSteps` thay vì `additionalContext`), chúng ta cần ghi đè hoặc tạo file hook script này.
+Do định dạng JSON mặc định của hook trong repo `superpowers` không tương thích với Antigravity CLI (Antigravity yêu cầu định dạng `injectSteps` thay vì `additionalContext`), ta cần ghi đè file hook này bằng lệnh `cat` dưới đây:
 
-1. Đảm bảo thư mục hooks đã được tạo:
-   ```bash
-   mkdir -p ~/.gemini/config/plugins/superpowers/hooks
-   ```
+```bash
+cat << 'EOF' > ~/.gemini/config/plugins/superpowers/hooks/session-start
+#!/usr/bin/env bash
+# SessionStart hook for superpowers plugin — Antigravity CLI version
+# Inject using-superpowers context before EVERY model call (ephemeral)
+set -euo pipefail
 
-2. Tạo hoặc ghi đè nội dung file **`~/.gemini/config/plugins/superpowers/hooks/session-start`** bằng script dưới đây:
-   ```bash
-   #!/usr/bin/env bash
-   # SessionStart hook for superpowers plugin — Antigravity CLI version
-   # Inject using-superpowers context before EVERY model call (ephemeral)
-   set -euo pipefail
+# Tự xác định đường dẫn thư mục gốc của plugin
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-   # Tự xác định đường dẫn thư mục gốc của plugin
-   SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-   PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+# Đọc nội dung skill 'using-superpowers'
+SKILL_FILE="${PLUGIN_ROOT}/skills/using-superpowers/SKILL.md"
+if [ -f "$SKILL_FILE" ]; then
+  using_superpowers_content=$(cat "$SKILL_FILE")
+else
+  using_superpowers_content="Error: using-superpowers skill not found at ${SKILL_FILE}"
+fi
 
-   # Đọc nội dung skill 'using-superpowers'
-   SKILL_FILE="${PLUGIN_ROOT}/skills/using-superpowers/SKILL.md"
-   if [ -f "$SKILL_FILE" ]; then
-     using_superpowers_content=$(cat "$SKILL_FILE")
-   else
-     using_superpowers_content="Error: using-superpowers skill not found at ${SKILL_FILE}"
-   fi
+# Hàm escape ký tự đặc biệt để đảm bảo an toàn cho chuỗi JSON
+escape_for_json() {
+    local s="$1"
+    s="${s//\\/\\\\}"
+    s="${s//\"/\\\"}"
+    s="${s//$'\n'/\\n}"
+    s="${s//$'\r'/\\r}"
+    s="${s//$'\t'/\\t}"
+    printf '%s' "$s"
+}
 
-   # Hàm escape ký tự đặc biệt để đảm bảo an toàn cho chuỗi JSON
-   escape_for_json() {
-       local s="$1"
-       s="${s//\\/\\\\}"
-       s="${s//\"/\\\"}"
-       s="${s//$'\n'/\\n}"
-       s="${s//$'\r'/\\r}"
-       s="${s//$'\t'/\\t}"
-       printf '%s' "$s"
-   }
+using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
 
-   using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
 
-   session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers.\n\n**Below is the full content of your 'superpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n</EXTREMELY_IMPORTANT>"
+# Trả về định dạng JSON đúng chuẩn PreInvocation của Antigravity
+printf '{\n  "injectSteps": [\n    {\n      "ephemeralMessage": "%s"\n    }\n  ]\n}\n' "$session_context"
 
-   # Trả về định dạng JSON đúng chuẩn PreInvocation của Antigravity
-   printf '{\n  "injectSteps": [\n    {\n      "ephemeralMessage": "%s"\n    }\n  ]\n}\n' "$session_context"
+exit 0
+EOF
+```
 
-   exit 0
-   ```
-
-3. Phân quyền thực thi cho file script vừa tạo:
-   ```bash
-   chmod +x ~/.gemini/config/plugins/superpowers/hooks/session-start
-   ```
+Sau đó, cấp quyền thực thi cho hook:
+```bash
+chmod +x ~/.gemini/config/plugins/superpowers/hooks/session-start
+```
 
 ---
 
