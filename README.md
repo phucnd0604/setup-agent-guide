@@ -143,14 +143,19 @@ Mở DSH → Plugins: phải thấy đủ 14 plugin ở tab Installed, không pl
 | Sửa URL | Không sửa tại chỗ: xoá rồi **Add index source** lại. Lỗi đọc lần cuối (kèm JSON path nếu sai format) hiện ngay dưới dòng đó trong dialog. |
 | Đọc lại | Nút refresh trên toolbar, hoặc mở lại tab Discover. Host cũng tự đọc lại khi index đổi (`plugin-market/changed`) hoặc khi restart. |
 
-### Phía repo (nội dung index)
+### Phía repo (danh sách plugin)
+
+Danh sách nằm ở [`dsh-plugins.json`](dsh-plugins.json) — mỗi dòng `"<package>": "<spec>"`. Đây là **nguồn duy nhất**: index được sinh ra từ file này, và workflow hằng ngày cũng chỉ đọc nó, nên sửa file là đủ, không phụ thuộc máy nào.
 
 | Việc | Cách làm |
 |---|---|
-| Thêm plugin | Cài trong DSH (`dsh plugin --profile desktop add <spec>`) → `node build-dsh-plugin-index.mjs` → commit `dsh-plugins.json` + `dsh-plugins-index.json`. |
-| Xoá plugin | `dsh plugin --profile desktop remove <pkg>` → chạy lại script trên → commit. |
-| Sửa mô tả / tác giả / homepage | Lấy tự động từ `package.json` của plugin (hoặc npm registry) — sửa tay trong index sẽ bị Action ghi đè ở lần chạy sau. |
+| **Thêm** plugin | Thêm một dòng `"<tên-package>": "<spec>"` → `node build-dsh-plugin-index.mjs` → commit. Hoặc cài plugin như bình thường rồi chạy `node build-dsh-plugin-index.mjs --refresh-manifest` để lấy lại toàn bộ danh sách từ máy. |
+| **Xoá** plugin khỏi danh sách | Xoá dòng của nó → chạy script → commit. **Không cần uninstall**: plugin vẫn còn trên máy nhưng biến khỏi setup/khỏi index của mọi máy khác. Muốn gỡ luôn khỏi máy: `dsh plugin --profile desktop remove <pkg>`. |
+| **Sửa** | Đổi tên hoặc spec. npm: giá trị version **không** ảnh hưởng (index liệt kê mọi bản đã publish). Git: `github:owner/repo` = commit HEAD, `github:owner/repo#<sha40>` = ghim đúng commit. |
 | Đổi tên index hiển thị | Sửa hằng `title` trong `build-dsh-plugin-index.mjs` rồi chạy lại (sửa thẳng JSON cũng bị ghi đè). |
-| Sửa version / thêm bản cũ | Không cần — mọi version đã publish đều được liệt kê; muốn ghim bản cụ thể thì dùng trang **Versions** của plugin trong Discover. |
+| Mô tả / tác giả / homepage | Lấy tự động từ `package.json` của plugin (npm registry hoặc repo) — đừng sửa tay trong index, lần sau bị ghi đè. |
+| Sửa version / thêm bản cũ | Không cần: mọi version đã publish đều có trong index; ghim bản cụ thể thì chọn ở trang **Versions** của plugin trong Discover. |
+
+Sau khi sửa, máy khác thấy thay đổi ở lần Discover kế tiếp (hoặc bấm refresh). Nếu vừa sửa tay mà không muốn chờ cron: `gh workflow run "Refresh plugin index"`.
 
 > Index là nội dung bên thứ ba: DSH kiểm format nhưng không kiểm title/icon/source. Chỉ add source bạn tin, và xem source trong hộp thoại xác nhận trước khi Install.
