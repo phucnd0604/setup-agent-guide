@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@michengai/dsh-skills-manager": "1.5.5",
+    "@opencode2dsh/dsh-plugin": "^0.3.14",
+    "@phucnd0604/dsh-pua-en": "github:phucnd0604/dsh-pua-en",
+    "@wenaixi/dsh-ponytail": "5.6.6",
+    "@wenaixi/dsh-superpower": "8.1.2",
+    "dsh-better-sidebar": "0.33.0",
+    "dsh-brand-studio": "0.0.4",
+    "dsh-claude-style": "0.22.2",
+    "dsh-context": "0.87.1",
+    "dsh-delegate": "github:phucnd0604/dsh-delegate",
+    "dsh-genui": "0.3.4",
+    "dsh-mcp-connector": "github:phucnd0604/dsh-mcp-connector",
+    "dsh-mnemon": "0.5.55",
+    "dsh-vision-router": "3.4.0",
+    "dshmarket": "1.84.1"
+  }
+}

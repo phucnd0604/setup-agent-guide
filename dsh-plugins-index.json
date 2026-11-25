@@ -998,7 +998,7 @@
     {
       "name": "@opencode2dsh/dsh-plugin",
       "description": "Free OpenCode Zen models for DeepSeek Harness (DSH): native dsh-llm adapter plugin, no API key.",
-      "author": "FishBottle7 (https://github.com/FishBottle7)",
+      "author": "FishBottle7",
       "homepage": "https://github.com/FishBottle7/opencode2dsh#readme",
       "repository": {
         "url": "https://github.com/FishBottle7/opencode2dsh"
@@ -1149,7 +1149,7 @@
     },
     {
       "name": "@wenaixi/dsh-ponytail",
-      "description": "DeepSeek Harness plugin: DietrichGebert/ponytail lazy senior mode & 7-rung ladder port, 6 skills with bilingual descriptions & per-skill toggles, zero tools, zero-cache-miss | DeepSeek Harness 插件：DietrichGebert/ponytail 懒人 senior 模式与七阶梯子完美移植，6 个技能描述双语自由切换，各个技能自由开关，零 tool 注册，全场景零缓存破坏",
+      "description": "DeepSeek Harness plugin: DietrichGebert/ponytail lazy senior mode & 7-rung ladder port, 6 skills with bilingual descriptions & per-skill toggles, zero tools, zero-cache-miss | DeepSeek Harness 插件：DietrichGebert/ponytail 懒人 senior 模式与七阶梯子完美移植，6 个技能描述双语自由切换",
       "author": "Dietrich Gebert",
       "homepage": "https://github.com/Wenaixi/dsh-ponytail#readme",
       "repository": {
@@ -1661,7 +1661,7 @@
     },
     {
       "name": "dsh-better-sidebar",
-      "description": "Better Sidebar for DSH — file tree, editor, changes, tasks and side chat in one column, separate for every conversation. Configure it in Settings → Side card (bottom-left). Also exposes a service other plugins use to register sidebar tabs and file viewers.",
+      "description": "Better Sidebar for DSH — file tree, editor, changes, tasks and side chat in one column, separate for every conversation. Configure it in Settings → Side card (bottom-left). Also exposes a service other plugins use to register sidebar tabs and file viewers",
       "repository": {
         "url": "https://github.com/omdsh-dev/DSH-better-sidebar"
       },
@@ -1961,6 +1961,7 @@
     {
       "name": "dsh-brand-studio",
       "description": "Customizable in-app branding for DeepSeek Harness Web, PWA, and Desktop.",
+      "homepage": "https://github.com/qiweiii/dsh-brand-studio#readme",
       "repository": {
         "url": "https://github.com/qiweiii/dsh-brand-studio"
       },
