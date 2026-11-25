@@ -1,0 +1,6 @@
+Add DSH plugin index + restore guide
+
+- dsh-plugins-index.json: format 1 plugin index for DSH Discover,
+  15 plugins / 969 published versions, newest compatible is recommended
+- build-dsh-plugin-index.mjs: regenerates the index from the local DSH profile
+- README.md: restore steps (index, CLI, bundles, profile config)
