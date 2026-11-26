@@ -1955,6 +1955,16 @@
           "engines": {
             "dsh": ">=0.2.2-rc.3 <0.3.0"
           }
+        },
+        {
+          "version": "0.34.0-alpha.0",
+          "publishTimestamp": 1795675261,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.3-alpha.2 <0.3.0"
+          }
         }
       ]
     },
@@ -2918,6 +2928,20 @@
         {
           "version": "0.22.2-dev.73",
           "publishTimestamp": 1795545854,
+          "source": {
+            "type": "npm"
+          }
+        },
+        {
+          "version": "0.22.3-dev.74",
+          "publishTimestamp": 1795630025,
+          "source": {
+            "type": "npm"
+          }
+        },
+        {
+          "version": "0.22.3",
+          "publishTimestamp": 1795630081,
           "source": {
             "type": "npm"
           }
@@ -4205,6 +4229,16 @@
         {
           "version": "0.87.1",
           "publishTimestamp": 1795371681,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 || >=0.2.1-rc.2 || >=0.2.2-rc.1"
+          }
+        },
+        {
+          "version": "0.87.2",
+          "publishTimestamp": 1795662854,
           "source": {
             "type": "npm"
           },
