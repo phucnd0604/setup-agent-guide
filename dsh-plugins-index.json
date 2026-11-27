@@ -2945,6 +2945,20 @@
           "source": {
             "type": "npm"
           }
+        },
+        {
+          "version": "0.22.4-dev.75",
+          "publishTimestamp": 1795710395,
+          "source": {
+            "type": "npm"
+          }
+        },
+        {
+          "version": "0.22.4",
+          "publishTimestamp": 1795710508,
+          "source": {
+            "type": "npm"
+          }
         }
       ]
     },
@@ -5135,6 +5149,16 @@
         {
           "version": "0.5.55",
           "publishTimestamp": 1795545367,
+          "source": {
+            "type": "npm"
+          },
+          "engines": {
+            "dsh": ">=0.2.0-rc.2 <0.2.1-0 || >=0.2.1-rc.1 <0.3.0-0"
+          }
+        },
+        {
+          "version": "0.5.56",
+          "publishTimestamp": 1795718306,
           "source": {
             "type": "npm"
           },
@@ -7336,6 +7360,13 @@
         {
           "version": "1.84.1",
           "publishTimestamp": 1795534482,
+          "source": {
+            "type": "npm"
+          }
+        },
+        {
+          "version": "1.84.2",
+          "publishTimestamp": 1795699862,
           "source": {
             "type": "npm"
           }
